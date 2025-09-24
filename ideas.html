@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Idées & Thèmes</title>
+    <link rel="stylesheet" href="css/ideas.css">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back-link">← Retour</a>
+        <h1>Idées & Thèmes</h1>
+    </header>
+
+    <main>
+        <section class="theme-section">
+            <h2>Gérer les thèmes</h2>
+            <form id="theme-form">
+                <input type="text" id="theme-name" placeholder="Nom du thème" required>
+                <input type="color" id="theme-color" value="#ff9800">
+                <label for="theme-start-date">Date de début :</label>
+                <input type="date" id="theme-start-date">
+                <label for="theme-end-date">Date de fin :</label>
+                <input type="date" id="theme-end-date">
+                <label for="theme-image-upload">Image du thème (optionnel) :</label>
+                <input type="file" id="theme-image-upload" accept="image/*">
+                <button type="submit">Ajouter un thème</button>
+            </form>
+            <div id="themes-list"></div>
+        </section>
+
+        <section class="activity-section">
+            <h2>Mes activités</h2>
+            <div id="filter-buttons">
+                </div>
+            <div id="activities-list"></div>
+        </section>
+
+        <section class="activity-creation-section">
+            <h2>Ajouter une activité</h2>
+            <form id="activity-form">
+                <input type="text" id="activity-title" placeholder="Titre de l'activité" required>
+                <textarea id="activity-description" placeholder="Description"></textarea>
+                
+                <label for="age-range">Tranche d'âge :</label>
+                <select id="age-range">
+                    <option value="">-- Choisir une tranche d'âge --</option>
+                    <option value="1-2 ans">1-2 ans</option>
+                    <option value="2-3 ans">2-3 ans</option>
+                    <option value="3-4 ans">3-4 ans</option>
+                    <option value="4-5 ans">4-5 ans</option>
+                    <option value="5-6 ans">5-6 ans</option>
+                    <option value="custom">Personnalisé...</option>
+                </select>
+                <input type="text" id="custom-age-input" class="hidden" placeholder="Précisez la tranche d'âge...">
+
+                <label for="activity-image-upload">Capture d'écran de l'activité :</label>
+                <input type="file" id="activity-image-upload" accept="image/*">
+
+                <label for="activity-material">Matériel :</label>
+                <textarea id="activity-material" placeholder="Liste du matériel nécessaire..."></textarea>
+
+                <label for="activity-theme-select">Thème :</label>
+                <select id="activity-theme-select">
+                    </select>
+                <button type="submit">Sauvegarder l'activité</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="js/ideas.js"></script>
+</body>
+</html>

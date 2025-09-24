@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Planning - SUPERmam</title>
+    <link rel="stylesheet" href="css/planning.css">
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#ffb347">
+</head>
+<body>
+    <header>
+        <a href="index.html" class="back">⬅ Retour</a>
+        <h1>Planning</h1>
+    </header>
+
+    <main>
+        <div class="calendar-container">
+            <div class="calendar-header">
+                <button id="prev-month" class="nav-btn">←</button>
+                <h2 id="current-month-year"></h2>
+                <button id="next-month" class="nav-btn">→</button>
+            </div>
+            <div class="calendar-grid">
+                <div class="weekdays">
+                    <span>Lun</span>
+                    <span>Mar</span>
+                    <span>Mer</span>
+                    <span>Jeu</span>
+                    <span>Ven</span>
+                    <span>Sam</span>
+                    <span>Dim</span>
+                </div>
+                <div id="calendar-body" class="days-container">
+                    </div>
+            </div>
+        </div>
+    </main>
+
+    <div id="popup" class="popup hidden">
+        <div class="popup-content">
+            <span class="close-btn">&times;</span>
+            <h3 id="popup-date"></h3>
+            
+            <div id="theme-info-display" class="info-display hidden">
+                <h4>Informations du thème :</h4>
+                <p><strong id="theme-name"></strong></p>
+                <p><strong id="theme-period"></strong></p>
+                <img id="theme-image" src="" alt="Image du thème">
+            </div>
+
+            <div id="activity-info-display" class="info-display hidden">
+                <h4>Informations de l'activité :</h4>
+                <p><strong id="activity-name"></strong></p>
+                <p><strong id="activity-age-range"></strong></p>
+                <p><strong id="activity-description"></strong></p>
+                <p><strong id="activity-material"></strong></p>
+                <img id="activity-image" src="" alt="Image de l'activité">
+            </div>
+
+            <label for="activity-select">Activité :</label>
+            <select id="activity-select">
+                </select>
+            <div class="popup-buttons">
+                <button id="save-activity-btn">Enregistrer</button>
+                <button id="delete-activity-btn" class="hidden">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/planning.js"></script>
+</body>
+</html>
