@@ -24,6 +24,41 @@ document.addEventListener('DOMContentLoaded', () => {
     let themes = JSON.parse(localStorage.getItem('themes')) || [];
     let activities = JSON.parse(localStorage.getItem('activities')) || [];
 
+
+    // NOUVEL ÉLÉMENT POUR LA PUBLICATION
+    const publishButton = document.getElementById('publish-btn');
+    const saveLocalButton = document.getElementById('save-local-btn');
+
+    // ... (récupération des données depuis localStorage) ...
+
+// --- NOUVELLE FONCTION : Collecter les données de l'activité ---
+const collecterDonneesActivite = (imageUrl = '') => {
+    const ageRangeValue = ageRangeSelect.value;
+    const ageInfo = ageRangeValue === 'custom' ? customAgeInput.value : ageRangeValue;
+    
+    // On doit trouver le NOM du thème correspondant à l'ID
+    const themeObject = themes.find(t => t.id === activityThemeSelect.value);
+    const themeName = themeObject ? themeObject.name : 'Non classé';
+
+    // Notre API s'attend à un champ 'materiel' de type Array (tableau de chaînes)
+    const materielRaw = activityMaterialInput.value;
+    const materielArray = materielRaw ? materielRaw.split('\n').map(item => item.trim()).filter(item => item) : [];
+
+
+    // L'objet doit correspondre aux noms de champs de votre modèle Mongoose (Activite.js)
+    return {
+        titre: activityTitleInput.value,
+        description: activityDescriptionInput.value,
+        ageCible: ageInfo, // Le modèle Mongoose a 'ageCible'
+        materiel: materielArray, // Le modèle Mongoose a 'materiel'
+        theme: themeName, // Le modèle Mongoose a 'theme'
+        // Pas de durée ou de fichier joint pour l'instant dans le HTML, 
+        // mais si vous les ajoutez, les inclure ici.
+        // imageBase64: imageUrl, // Optionnel : si vous voulez stocker l'image sur un service cloud plus tard
+    };
+};
+
+    
     // --- Fonctions de rendu et de gestion des données ---
 
     /**
@@ -119,6 +154,53 @@ document.addEventListener('DOMContentLoaded', () => {
         return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
     };
 
+
+// --- FONCTION DE PUBLICATION VERS L'API (À AJOUTER) ---
+
+/**
+ * Envoie l'activité au serveur pour la publication sur le réseau social.
+ * @param {object} donnees - L'objet activité à envoyer.
+ */
+async function publierActiviteAPI(donnees) {
+    // !! REMPLACER http://localhost:3000 si votre serveur tourne sur un autre port !!
+    const API_URL = 'http://localhost:3000/api/activites'; 
+
+    if (!donnees.titre || !donnees.description) {
+        alert("Veuillez remplir au moins le titre et la description avant de publier.");
+        return;
+    }
+
+    publishButton.textContent = 'Publication...';
+    publishButton.disabled = true;
+
+    try {
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(donnees) 
+        });
+
+        const result = await response.json();
+
+        if (response.ok) { // Statut 201 ou 200
+            alert("✅ Activité publiée sur le réseau avec succès ! ID MongoDB: " + result.data._id);
+            // Optionnel : Réinitialiser le formulaire après la publication
+            activityForm.reset(); 
+        } else { // Statut 400 ou 500
+            alert(`❌ Échec de la publication : ${result.message || result.error}`);
+        }
+
+    } catch (error) {
+        console.error('Erreur réseau ou serveur:', error);
+        alert("Une erreur de connexion inattendue est survenue. Le serveur est-il démarré ?");
+    } finally {
+        publishButton.textContent = 'Publier sur le Réseau';
+        publishButton.disabled = false;
+    }
+}
+
+
+    
     /**
      * Lit un fichier (image) et le convertit en chaîne de caractères Base64.
      * @param {File} file - Fichier image.
@@ -221,7 +303,22 @@ document.addEventListener('DOMContentLoaded', () => {
         renderActivities();
     });
 
+if (publishButton) { // Vérification pour être sûr que le bouton existe dans le HTML
+    publishButton.addEventListener('click', async () => {
+        // 1. On utilise la fonction de collecte pour préparer l'objet
+        const donneesAPI = collecterDonneesActivite();
+        
+        // 2. On appelle la fonction pour envoyer au Back-end
+        await publierActiviteAPI(donneesAPI);
+        
+        // Comme activityForm.reset() est dans publierActiviteAPI, rien d'autre n'est nécessaire ici.
+    });
+}
+
+
+    
     // Initialisation : affichage des éléments au chargement de la page
     renderThemes();
     renderActivities();
+
 });
